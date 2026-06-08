@@ -1,0 +1,109 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300..750;1,300..750&family=Outfit:wght@300..700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Outfit", var(--font-sans);
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-white: var(--card-bg);
+  --color-black: var(--app-fg);
+
+  --color-sage-50: var(--th-sage-50);
+  --color-sage-100: var(--th-sage-100);
+  --color-sage-200: var(--th-sage-200);
+  --color-sage-600: var(--th-sage-600);
+  --color-sage-700: var(--th-sage-700);
+  --color-sage-800: var(--th-sage-800);
+  
+  --color-sand-50: var(--th-sand-50);
+  --color-sand-100: var(--th-sand-100);
+  --color-sand-200: var(--th-sand-200);
+  --color-sand-400: var(--th-sand-400);
+  --color-sand-500: var(--th-sand-500);
+  --color-sand-600: var(--th-sand-600);
+  --color-sand-700: var(--th-sand-700);
+  --color-sand-800: var(--th-sand-800);
+  --color-sand-900: var(--th-sand-900);
+}
+
+:root {
+  --th-sage-50: #eef5ee;
+  --th-sage-100: #dbedd5;
+  --th-sage-200: #c2dec2;
+  --th-sage-600: #3a6146;
+  --th-sage-700: #2c4734;
+  --th-sage-800: #1c2e22;
+
+  --th-sand-50: #f2f7f2;
+  --th-sand-100: #dfebdf;
+  --th-sand-200: #c8dbc8;
+  --th-sand-400: #a3b8a3;
+  --th-sand-500: #7a917a;
+  --th-sand-600: #556b55;
+  --th-sand-700: #3b5240;
+  --th-sand-800: #1c2b20;
+  --th-sand-900: #111a13;
+
+  --app-bg: var(--th-sand-50);
+  --app-fg: #1c1d1a;
+  --card-bg: #ffffff;
+  --input-bg: var(--th-sand-50);
+}
+
+.dark {
+  --th-sage-50: #1c2e22;
+  --th-sage-100: #2c4734;
+  --th-sage-200: #3a6146;
+  --th-sage-600: #dbedd5;
+  --th-sage-700: #eef5ee;
+  --th-sage-800: #f4fbf4;
+
+  --th-sand-50: #0a110d;
+  --th-sand-100: #1c2b20;
+  --th-sand-200: #3b5240;
+  --th-sand-400: #7a917a;
+  --th-sand-500: #a3b8a3;
+  --th-sand-600: #c8dbc8;
+  --th-sand-700: #dfebdf;
+  --th-sand-800: #f2f7f2;
+  --th-sand-900: #f8fbf8;
+
+  --app-bg: var(--th-sand-50);
+  --app-fg: var(--th-sand-900);
+  --card-bg: var(--th-sand-100);
+  --input-bg: var(--th-sand-100);
+}
+
+/* Base custom styles to provide a tactile card aesthetic and micro-elements */
+html, body, #root {
+  background-color: var(--app-bg);
+  color: var(--app-fg);
+  min-height: 100vh;
+  margin: 0;
+  font-family: var(--font-sans);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background-color: var(--color-sage-200);
+  color: var(--color-sage-800);
+}
+
+/* Custom scrollbars for botanical feel */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-sand-200);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-sage-200);
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Daily Stress Tracker & Journal",
+  "description": "A mindful companion that tracks daily stress levels, sleep, and core thoughts. Features interactive trend line charts and personalized AI-generated coping strategies.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
