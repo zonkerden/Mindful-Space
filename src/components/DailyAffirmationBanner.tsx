@@ -11,9 +11,9 @@ export default function DailyAffirmationBanner() {
   const [affirmation, setAffirmation] = useState<string>("Take a gentle breath. You are exactly where you need to be.");
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  const fetchWithRetry = async (retries = 3, delay = 1200): Promise<any> => {
+  const fetchWithRetry = async (retries = 3, delay = 1200, force = false): Promise<any> => {
     try {
-      const response = await fetch("/api/daily-affirmation");
+      const response = await fetch(`/api/daily-affirmation${force ? "?force=true" : ""}`);
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -21,16 +21,16 @@ export default function DailyAffirmationBanner() {
     } catch (e) {
       if (retries > 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));
-        return fetchWithRetry(retries - 1, delay * 1.5);
+        return fetchWithRetry(retries - 1, delay * 1.5, force);
       }
       throw e;
     }
   };
 
-  const fetchAffirmation = async () => {
+  const fetchAffirmation = async (force = false) => {
     setIsLoading(true);
     try {
-      const data = await fetchWithRetry();
+      const data = await fetchWithRetry(3, 1200, force);
       if (data && data.affirmation) {
         setAffirmation(data.affirmation.replace(/[""]/g, ""));
       }
@@ -89,7 +89,7 @@ export default function DailyAffirmationBanner() {
 
       <div className="relative z-10 flex-shrink-0">
         <button
-          onClick={fetchAffirmation}
+          onClick={() => fetchAffirmation(true)}
           disabled={isLoading}
           className="px-4 py-2 bg-white/60 hover:bg-white rounded-xl text-xs font-bold text-sage-700 border border-sage-200/60 shadow-sm transition-all focus:outline-none flex items-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         >

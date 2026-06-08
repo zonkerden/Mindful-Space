@@ -205,11 +205,17 @@ function getDailyFallbackAffirmation(): string {
   return MINDFUL_AFFIRMATIONS[dayIndex];
 }
 
+function getRandomFallbackAffirmation(): string {
+  const randomIndex = Math.floor(Math.random() * MINDFUL_AFFIRMATIONS.length);
+  return MINDFUL_AFFIRMATIONS[randomIndex];
+}
+
 // Fetch General Daily Affirmation
 app.get("/api/daily-affirmation", async (req, res) => {
+  const forceNew = req.query.force === 'true';
   const todayStr = new Date().toDateString();
 
-  if (dailyAffirmationCache.dateString === todayStr && dailyAffirmationCache.text) {
+  if (!forceNew && dailyAffirmationCache.dateString === todayStr && dailyAffirmationCache.text) {
     return res.json({
       affirmation: dailyAffirmationCache.text,
       _mode: "cached"
@@ -220,7 +226,13 @@ app.get("/api/daily-affirmation", async (req, res) => {
 
   // If no AI, or offline
   if (!ai) {
-    const fallbackVal = getDailyFallbackAffirmation();
+    let fallbackVal = forceNew ? getRandomFallbackAffirmation() : getDailyFallbackAffirmation();
+    // Prevent immediate loop of same random affirmation if forced
+    if (forceNew && fallbackVal === dailyAffirmationCache.text && MINDFUL_AFFIRMATIONS.length > 1) {
+       while (fallbackVal === dailyAffirmationCache.text) {
+           fallbackVal = getRandomFallbackAffirmation();
+       }
+    }
     dailyAffirmationCache.text = fallbackVal;
     dailyAffirmationCache.dateString = todayStr;
     return res.json({
@@ -234,6 +246,7 @@ app.get("/api/daily-affirmation", async (req, res) => {
       Generate one single personalized, encouraging, and uplifting positive affirmation for general well-being.
       It should be beautiful, warm, and not cheesy. Maximum 2 sentences.
       Do not include any formatting or quotes, just the text.
+      For variety, here is a random seed constraint to inspire a totally unique angle: ${Math.random()}
     `;
 
     const response = await ai.models.generateContent({
@@ -258,7 +271,12 @@ app.get("/api/daily-affirmation", async (req, res) => {
       _mode: "ai-generated"
     });
   } catch (err: any) {
-    const fallbackVal = getDailyFallbackAffirmation();
+    let fallbackVal = forceNew ? getRandomFallbackAffirmation() : getDailyFallbackAffirmation();
+    if (forceNew && fallbackVal === dailyAffirmationCache.text && MINDFUL_AFFIRMATIONS.length > 1) {
+       while (fallbackVal === dailyAffirmationCache.text) {
+           fallbackVal = getRandomFallbackAffirmation();
+       }
+    }
     dailyAffirmationCache.text = fallbackVal;
     dailyAffirmationCache.dateString = todayStr; // Cache today's fallback to prevent throttling calls completely
 
